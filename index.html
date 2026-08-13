@@ -1,223 +1,834 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Bharat, Unbound Dreams</title>
-    <style>
-        :root {
-            --saffron: #FF9933;
-            --white: #FFFFFF;
-            --green: #138808;
-            --bg-dark: #0b1329;
-            --card-bg: #162447;
-            --accent-blue: #00d2ff;
-            --text-light: #e2e8f0;
-            --text-dim: #94a3b8;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Bharat, Unbound Dreams</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --border: rgba(255, 255, 255, 0.08);
+      --orange: #f97316;
+      --green: #10b981;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
 
-        header {
-            background: rgba(11, 19, 41, 0.95);
-            border-bottom: 2px solid rgba(255, 153, 51, 0.3);
-            position: sticky; top: 0; z-index: 1000;
-            padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
-        }
+    /* Header */
+    header { position: sticky; top: 0; background: rgba(11, 15, 25, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 1.25rem 1.5rem; z-index: 100; }
+    .nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px; cursor: pointer; user-select: none; }
+    .logo span { color: var(--blue); }
+    nav { display: flex; gap: 0.25rem; background: rgba(31, 41, 55, 0.5); padding: 0.35rem; border-radius: 999px; border: 1px solid var(--border); }
+    
+    /* Interactive Ripple Buttons */
+    .nav-btn, .btn-primary, .btn-secondary, .amt-chip, .filter-chip { position: relative; overflow: hidden; user-select: none; }
+    
+    .nav-btn { background: none; border: none; color: var(--muted); padding: 0.5rem 1.1rem; border-radius: 999px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+    .nav-btn:hover { color: white; }
+    .nav-btn.active { background: var(--blue); color: white; box-shadow: 0 4px 14px rgba(59,130,246,0.4); }
 
-        .logo {
-            font-size: 1.4rem; font-weight: 800;
-            background: linear-gradient(45deg, var(--saffron), #ffffff, var(--green));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.5);
+      transform: scale(0);
+      animation: ripple-anim 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-anim {
+      to { transform: scale(4); opacity: 0; }
+    }
 
-        .nav-links { display: flex; gap: 10px; list-style: none; }
-        .nav-btn {
-            background: transparent; border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-light); padding: 8px 16px; border-radius: 20px;
-            cursor: pointer; font-weight: 600; transition: all 0.3s ease;
-        }
-        .nav-btn:hover, .nav-btn.active {
-            background: linear-gradient(135deg, var(--saffron), #e67e22);
-            color: #000; border-color: var(--saffron); box-shadow: 0 0 15px rgba(255, 153, 51, 0.4);
-        }
+    /* Main Container */
+    main { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; flex-grow: 1; width: 100%; }
+    .page { display: none; flex-direction: column; gap: 2rem; animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    .page.active { display: flex; }
 
-        main { flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 2rem 1.5rem; }
-        .page-section { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .page-section.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* Hero */
+    .hero { background: radial-gradient(circle at top, rgba(59, 130, 246, 0.25) 0%, transparent 70%), rgba(17, 24, 39, 0.5); border: 1px solid var(--border); padding: 3.5rem 2rem; border-radius: 2rem; text-align: center; position: relative; }
+    .tag { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.9rem; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); color: var(--blue); border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1.25rem; }
+    h1 { font-size: 2.75rem; font-weight: 800; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -1px; }
+    .grad-text { background: linear-gradient(135deg, #3b82f6 0%, #ffffff 50%, #10b981 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    p.desc { color: var(--muted); max-width: 620px; margin: 0 auto 1.75rem auto; line-height: 1.6; font-size: 1rem; }
 
-        .hero {
-            text-align: center; padding: 3rem 1rem;
-            background: radial-gradient(circle at center, rgba(0, 210, 255, 0.1) 0%, transparent 70%);
-            border-radius: 20px; margin-bottom: 2.5rem; border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .hero h1 {
-            font-size: 2.8rem; font-weight: 900; margin-bottom: 10px;
-            background: linear-gradient(90deg, #FF9933, #FFFFFF, #138808);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero .subtitle { font-size: 1.2rem; color: var(--accent-blue); font-weight: 600; margin-bottom: 20px; }
+    /* Stats Bar */
+    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.75rem; }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--text); }
+    .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; margin-top: 0.2rem; }
 
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 1.5rem; }
-        .card-btn {
-            background: rgba(0, 210, 255, 0.1); color: var(--accent-blue);
-            border: 1px solid rgba(0, 210, 255, 0.3); padding: 8px 16px;
-            border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 15px;
-        }
+    /* Buttons */
+    .btn-primary { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 0.9rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35); }
+    .btn-primary:active { transform: scale(0.96) !important; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5); }
+    
+    .btn-secondary { background: rgba(31, 41, 55, 0.8); color: white; border: 1px solid var(--border); padding: 0.85rem 1.75rem; border-radius: 0.9rem; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: transform 0.15s ease, background 0.2s ease; }
+    .btn-secondary:active { transform: scale(0.96) !important; }
+    .btn-secondary:hover { background: rgba(55, 65, 81, 0.8); border-color: rgba(255,255,255,0.2); }
 
-        .simulator-box { background: #111d38; border: 1px solid rgba(255, 153, 51, 0.3); border-radius: 20px; padding: 2rem; margin-top: 2rem; }
-        .sim-input-group { display: flex; gap: 15px; margin: 1.5rem 0; flex-wrap: wrap; }
-        input[type="number"], select {
-            background: #0b1329; border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff; padding: 12px 18px; border-radius: 10px; font-size: 1rem; flex: 1; min-width: 200px;
-        }
-        .action-btn { background: linear-gradient(135deg, var(--saffron), #e67e22); color: #000; font-weight: 700; padding: 12px 24px; border: none; border-radius: 10px; cursor: pointer; }
-        .soundbox-display { background: #070d19; border: 2px solid var(--green); padding: 1.5rem; border-radius: 12px; font-family: monospace; color: #2ed573; text-align: center; }
+    /* Cards Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.75rem; border-radius: 1.25rem; cursor: pointer; transition: all 0.25s ease; backdrop-filter: blur(12px); display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+    .card:hover { border-color: rgba(59, 130, 246, 0.5); transform: translateY(-4px) scale(1.01); box-shadow: 0 12px 30px -5px rgba(59, 130, 246, 0.25); }
+    .card-icon { width: 42px; height: 42px; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 1rem; background: rgba(59, 130, 246, 0.2) !important; color: var(--blue) !important; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    .card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .card p { color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
 
-        .timeline-item { background: var(--card-bg); border-left: 4px solid var(--saffron); padding: 1rem 1.5rem; border-radius: 0 12px 12px 0; margin-bottom: 15px; }
-        .smartboard { background: #000; border: 8px solid #2d3748; border-radius: 15px; padding: 2rem; color: #00ffcc; font-family: 'Courier New', monospace; min-height: 200px; }
-    </style>
+    /* Simulator Card */
+    .sim-card { background: rgba(17, 24, 39, 0.9); border: 1px solid var(--border); padding: 2rem; border-radius: 1.5rem; max-width: 440px; margin: 0 auto; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .sim-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.85rem; margin-bottom: 1.25rem; font-size: 0.8rem; color: var(--muted); }
+    .sim-badge { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--green); font-weight: 600; }
+    .sim-badge::before { content: ""; width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: 0 0 8px var(--green); }
+    
+    .amount-display { text-align: center; margin: 1.5rem 0; }
+    .amount-display span { font-size: 1rem; color: var(--muted); font-weight: 600; }
+    .amount-display h2 { font-size: 5.5rem; font-weight: 900; margin-top: 0.25rem; transition: transform 0.15s ease; color: #ffffff; letter-spacing: -2px; display: flex; justify-content: center; align-items: center; gap: 0.2rem; line-height: 1; }
+
+    .amount-selector { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.5rem; }
+    .amt-chip { background: rgba(31, 41, 55, 0.8); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1rem; border-radius: 0.6rem; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .amt-chip:hover, .amt-chip.active { border-color: var(--blue); color: var(--blue); background: rgba(59, 130, 246, 0.15); }
+
+    /* Interactive Filters */
+    .filter-bar { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .filter-chip { background: rgba(31, 41, 55, 0.6); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.2rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .filter-chip.active { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
+
+    /* Canvas Diagrams */
+    .canvas-container { width: 100%; height: 260px; background: rgba(0,0,0,0.5); border-radius: 1rem; border: 1px solid var(--border); margin: 1rem 0; position: relative; overflow: hidden; }
+    canvas { width: 100%; height: 100%; display: block; }
+
+    /* Success Banner */
+    .success-banner { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--green); padding: 0.85rem; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 600; text-align: center; margin-top: 1rem; display: none; }
+
+    /* Mini Game */
+    .game-box { background: rgba(17, 24, 39, 0.9); border: 1px solid var(--border); padding: 1.5rem; border-radius: 1.5rem; text-align: center; max-width: 500px; margin: 1.5rem auto; width: 100%; }
+    .game-arena { width: 100%; height: 200px; background: #030712; border-radius: 1rem; margin: 1rem 0; position: relative; overflow: hidden; border: 1px dashed var(--border); }
+
+    /* Moon Lander Specifics */
+    .lander-craft { width: 32px; height: 32px; position: absolute; font-size: 1.6rem; user-select: none; transform: translate(-50%, -50%); transition: left 0.1s linear; }
+    .landing-pad { position: absolute; bottom: 0; width: 60px; height: 8px; background: var(--green); border-radius: 4px; box-shadow: 0 0 10px var(--green); transform: translateX(-50%); }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); text-align: center; padding: 1.75rem; color: var(--muted); font-size: 0.85rem; margin-top: auto; background: rgba(11, 15, 25, 0.8); }
+
+    @media (max-width: 640px) {
+      header { padding: 1rem; }
+      nav { overflow-x: auto; max-width: 100%; }
+      h1 { font-size: 2rem; }
+      .hero { padding: 2.5rem 1.25rem; }
+      .amount-display h2 { font-size: 4rem; }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">🇮🇳 Digital Bharat, Unbound Dreams</div>
-        <ul class="nav-links">
-            <li><button class="nav-btn active" onclick="switchPage('home')">Home</button></li>
-            <li><button class="nav-btn" onclick="switchPage('upi')">UPI & Fintech</button></li>
-            <li><button class="nav-btn" onclick="switchPage('space')">Space Tech</button></li>
-            <li><button class="nav-btn" onclick="switchPage('startups')">Startup Hub</button></li>
-            <li><button class="nav-btn" onclick="switchPage('education')">Classrooms</button></li>
-        </ul>
-    </header>
+  <!-- HEADER / NAVIGATION -->
+  <header>
+    <div class="nav-container">
+      <div class="logo" onclick="showPage('home')">DIGITAL<span>BHARAT</span></div>
+      <nav>
+        <button class="nav-btn active" onclick="showPage('home')" id="btn-home">Home</button>
+        <button class="nav-btn" onclick="showPage('upi')" id="btn-upi">UPI</button>
+        <button class="nav-btn" onclick="showPage('space')" id="btn-space">Space</button>
+        <button class="nav-btn" onclick="showPage('startups')" id="btn-startups">Startups</button>
+        <button class="nav-btn" onclick="showPage('classrooms')" id="btn-classrooms">Classrooms</button>
+      </nav>
+    </div>
+  </header>
 
-    <main>
-        <!-- HOME PAGE -->
-        <section id="page-home" class="page-section active">
-            <div class="hero">
-                <h1>Digital Bharat, Unbound Dreams</h1>
-                <div class="subtitle">Swipe for Swaraj, Click for Progress</div>
-                <p>Connecting 1.4 billion citizens through world-leading digital public infrastructure, deep-space missions, vibrant startup innovation, and smart connected classrooms.</p>
-            </div>
+  <!-- MAIN PAGE CONTENT -->
+  <main>
+    <!-- PAGE 1: HOME -->
+    <div id="page-home" class="page active">
+      <div class="hero">
+        <span class="tag">✨ Swipe for Swaraj, Click for Progress</span>
+        <h1>Digital Bharat,<br/><span class="grad-text">Unbound Dreams</span></h1>
+        <p class="desc">Connecting 1.4 billion minds through hyper-scale digital infrastructure. From tea stalls running on micro-payments to lunar rovers exploring cosmic frontiers.</p>
+        <button class="btn-primary" onclick="showPage('upi')">
+          <span>Explore UPI Simulator</span>
+          <span>→</span>
+        </button>
 
-            <div class="grid-4">
-                <div class="card">
-                    <h3>💳 UPI & Payments</h3>
-                    <p>Powering 24,000+ Crore annual transactions.</p>
-                    <button class="card-btn" onclick="switchPage('upi')">Explore UPI →</button>
-                </div>
-                <div class="card">
-                    <h3>🚀 Space Exploration</h3>
-                    <p>Chandrayaan-3, Aditya-L1 & Gaganyaan.</p>
-                    <button class="card-btn" onclick="switchPage('space')">Explore Space →</button>
-                </div>
-                <div class="card">
-                    <h3>💡 Startup Ecosystem</h3>
-                    <p>150,000+ Startups & 125+ Unicorns.</p>
-                    <button class="card-btn" onclick="switchPage('startups')">Explore Startups →</button>
-                </div>
-                <div class="card">
-                    <h3>🎓 Digital Classrooms</h3>
-                    <p>DIKSHA & 5G Rural Smartboards.</p>
-                    <button class="card-btn" onclick="switchPage('education')">Explore Classrooms →</button>
-                </div>
-            </div>
-        </section>
+        <div class="stats-bar">
+          <div class="stat-item">
+            <div class="stat-num" id="stat-upi">0</div>
+            <div class="stat-label">Billion UPI Txns</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" id="stat-unicorns">0</div>
+            <div class="stat-label">Tech Unicorns</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num" id="stat-cost">0</div>
+            <div class="stat-label">% Lower Mission Cost</div>
+          </div>
+        </div>
+      </div>
 
-        <!-- UPI PAGE -->
-        <section id="page-upi" class="page-section">
-            <h2>💳 UPI & Financial Inclusion Stack</h2>
-            <div class="simulator-box">
-                <h3>🔊 Live UPI Soundbox Simulator</h3>
-                <div class="sim-input-group">
-                    <input type="number" id="upiAmount" value="250" placeholder="Amount (₹)">
-                    <select id="upiLang">
-                        <option value="Hindi">Hindi (हिंदी)</option>
-                        <option value="English">English</option>
-                        <option value="Tamil">Tamil (தமிழ்)</option>
-                    </select>
-                    <button class="action-btn" onclick="triggerUpiPayment()">Simulate Payment</button>
-                </div>
-                <div class="soundbox-display" id="soundboxResult">[Soundbox Standby]</div>
-            </div>
-        </section>
+      <div class="grid">
+        <div class="card" onclick="showPage('upi')">
+          <div>
+            <div class="card-icon">💳</div>
+            <h3>FinTech (UPI) <span>→</span></h3>
+            <p>13+ Billion monthly transactions driving hyper-local micro economies.</p>
+          </div>
+        </div>
 
-        <!-- SPACE TECH PAGE -->
-        <section id="page-space" class="page-section">
-            <h2>🚀 Space Tech & Beyond (ISRO)</h2>
-            <div style="margin-top:20px;">
-                <div class="timeline-item">
-                    <h3 style="color:var(--saffron)">🌕 Chandrayaan-3</h3>
-                    <p>Historic soft landing on the lunar South Pole.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3 style="color:var(--accent-blue)">☀️ Aditya-L1</h3>
-                    <p>Solar observatory at Sun-Earth L1 point.</p>
-                </div>
-                <div class="timeline-item">
-                    <h3 style="color:#2ed573">👨‍🚀 Gaganyaan Mission</h3>
-                    <p>India's first crewed spaceflight orbital program.</p>
-                </div>
-            </div>
-        </section>
+        <div class="card" onclick="showPage('space')">
+          <div>
+            <div class="card-icon">🚀</div>
+            <h3>Space Tech <span>→</span></h3>
+            <p>Chandrayaan to Gaganyaan: Democratizing affordable interplanetary missions.</p>
+          </div>
+        </div>
 
-        <!-- STARTUPS PAGE -->
-        <section id="page-startups" class="page-section">
-            <h2>💡 Startup India Impact Estimator</h2>
-            <div class="simulator-box">
-                <h3>📊 Unicorn Impact Calculator</h3>
-                <div class="sim-input-group">
-                    <select id="startupSector">
-                        <option value="Fintech">Fintech Stack</option>
-                        <option value="SpaceTech">SpaceTech</option>
-                        <option value="AgriTech">AgriTech</option>
-                    </select>
-                    <input type="number" id="capitalInput" value="50" placeholder="Capital ($M)">
-                    <button class="action-btn" onclick="calculateStartupImpact()">Calculate</button>
-                </div>
-                <div class="soundbox-display" id="startupResult" style="text-align:left;">Click Calculate to estimate impact.</div>
-            </div>
-        </section>
+        <div class="card" onclick="showPage('startups')">
+          <div>
+            <div class="card-icon">🦄</div>
+            <h3>Startup Hub <span>→</span></h3>
+            <p>100+ Unicorns building AI, Agritech, and DeepTech for global scale.</p>
+          </div>
+        </div>
 
-        <!-- EDUCATION PAGE -->
-        <section id="page-education" class="page-section">
-            <h2>🎓 Digital Classrooms</h2>
-            <div class="smartboard" id="smartboardDisplay">> INITIALIZING VIRTUAL SMARTBOARD...</div>
-            <div style="margin-top:15px; display:flex; gap:10px;">
-                <button class="nav-btn active" onclick="updateSmartboard('math')">Math & Space</button>
-                <button class="nav-btn" onclick="updateSmartboard('coding')">Python & AI</button>
-            </div>
-        </section>
-    </main>
+        <div class="card" onclick="showPage('classrooms')">
+          <div>
+            <div class="card-icon">🎓</div>
+            <h3>Classrooms <span>→</span></h3>
+            <p>Democratizing quality education for rural schools via cloud infrastructure.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <script>
-        function switchPage(pageId) {
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
+    <!-- PAGE 2: UPI -->
+    <div id="page-upi" class="page">
+      <div class="hero">
+        <span class="tag">Fintech Innovation</span>
+        <h2>Unified Payments Interface (UPI)</h2>
+        <p class="desc">How a simple QR code unified a nation's financial grid, enabling instant payment access to millions.</p>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-header">
+          <span>Merchant: Local Chai Point</span>
+          <span class="sim-badge">Live Grid</span>
+        </div>
+
+        <div class="amount-display">
+          <span>Amount to Pay</span>
+          <h2><span>₹</span><span id="upi-amt">20</span></h2>
+        </div>
+
+        <div class="amount-selector">
+          <button class="amt-chip active" onclick="setAmt(10, this)">₹10</button>
+          <button class="amt-chip" onclick="setAmt(20, this)">₹20</button>
+          <button class="amt-chip" onclick="setAmt(50, this)">₹50</button>
+          <button class="amt-chip" onclick="setAmt(100, this)">₹100</button>
+        </div>
+
+        <button class="btn-primary" id="pay-btn" style="width: 100%;" onclick="pay()">Pay via UPI PIN</button>
+
+        <div class="success-banner" id="pay-status">
+          ✓ Payment Successful! Transaction ID: #UPI98420
+        </div>
+      </div>
+
+      <div style="text-align: right;">
+        <button class="btn-secondary" onclick="showPage('space')">Next: Explore Space Tech →</button>
+      </div>
+    </div>
+
+    <!-- PAGE 3: SPACE TECH -->
+    <div id="page-space" class="page">
+      <div class="hero">
+        <span class="tag">Cosmic Frontiers</span>
+        <h2>ISRO & Space Innovation</h2>
+        <p class="desc">Pioneering world-class space missions with legendary resource efficiency.</p>
+      </div>
+
+      <!-- ANIMATED CANVAS SPACE DIAGRAM -->
+      <div style="background: rgba(17, 24, 39, 0.8); border: 1px solid var(--border); padding: 1.5rem; border-radius: 1.25rem; text-align: center;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.25rem;">Interactive Orbital Launch Trajectory</h3>
+        <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.5rem;" id="space-status-txt">Status: Orbiting Earth... Click launch to execute Trans-Lunar Injection!</p>
+        
+        <div class="canvas-container">
+          <canvas id="spaceCanvas"></canvas>
+        </div>
+
+        <button class="btn-primary" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;" onclick="launchToMoon()">🚀 Launch Chandrayaan to Moon</button>
+      </div>
+
+      <!-- SPACE MISSIONS INFO CARDS -->
+      <div class="grid">
+        <div class="card" style="cursor: default;">
+          <div>
+            <div class="card-icon">🌕</div>
+            <h3>Chandrayaan-3</h3>
+            <p>Made India the 1st country to land near the Lunar South Pole. Delivered Vikram Lander and Pragyan Rover for groundbreaking soil analysis.</p>
+          </div>
+        </div>
+
+        <div class="card" style="cursor: default;">
+          <div>
+            <div class="card-icon">☀️</div>
+            <h3>Aditya-L1 Mission</h3>
+            <p>India's 1st solar observatory positioned at Lagrange Point 1 (1.5M km from Earth) studying coronal mass ejections and solar winds uninterrupted.</p>
+          </div>
+        </div>
+
+        <div class="card" style="cursor: default;">
+          <div>
+            <div class="card-icon">👨‍🚀</div>
+            <h3>Gaganyaan Mission</h3>
+            <p>India's upcoming human spaceflight program designed to carry 3 crew members into a 400km low Earth orbit for 3 days.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHANDRAYAAN MOON LANDING GAME -->
+      <div class="game-box">
+        <span class="tag">🎮 Chandrayaan-3 Landing Challenge</span>
+        <h3 style="font-size: 1.3rem; margin-top: 0.5rem;">Soft Land Vikram on the Moon!</h3>
+        <p style="font-size: 0.85rem; color: var(--muted);">Guide Vikram Lander safely to the green landing pad at South Pole.</p>
+        
+        <div style="display: flex; justify-style: space-around; margin-top: 0.75rem; font-weight: 700; font-size: 0.9rem;">
+          <div>Vertical Speed: <span id="lander-speed" style="color: var(--green);">0</span> m/s</div>
+          <div>Status: <span id="lander-status" style="color: var(--blue);">Ready</span></div>
+        </div>
+
+        <div class="game-arena" id="lander-arena">
+          <div class="lander-craft" id="vikram-lander">🚀</div>
+          <div class="landing-pad" id="landing-pad"></div>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem;">
+          <button class="btn-secondary" style="padding: 0.5rem 1rem;" onclick="steerLander(-12)">⬅️ Left</button>
+          <button class="btn-secondary" style="padding: 0.5rem 1rem;" onclick="thrustLander()">🔥 Thrusters</button>
+          <button class="btn-secondary" style="padding: 0.5rem 1rem;" onclick="steerLander(12)">Right ➡️</button>
+        </div>
+
+        <button class="btn-primary" id="start-lander-btn" onclick="startLanderGame()">Initiate Powered Descent 🚀</button>
+      </div>
+
+      <div style="text-align: right;">
+        <button class="btn-secondary" onclick="showPage('startups')">Next: Discover Startups →</button>
+      </div>
+    </div>
+
+    <!-- PAGE 4: STARTUPS -->
+    <div id="page-startups" class="page">
+      <div class="hero">
+        <span class="tag">Entrepreneurship Grid</span>
+        <h2>3rd Largest Startup Ecosystem</h2>
+        <p class="desc">Filter through key sectors driving India's tech ecosystem.</p>
+      </div>
+
+      <!-- ANIMATED CANVAS STARTUP GRAPH -->
+      <div style="background: rgba(17, 24, 39, 0.8); border: 1px solid var(--border); padding: 1.5rem; border-radius: 1.25rem; text-align: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Unicorn Growth Trajectory</h3>
+        <p style="font-size: 0.85rem; color: var(--muted);">Live interactive market valuation stream</p>
+        
+        <div class="canvas-container">
+          <canvas id="startupCanvas"></canvas>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <button class="filter-chip active" onclick="filterSector('ai', this)">DeepTech & AI</button>
+        <button class="filter-chip" onclick="filterSector('agri', this)">Agritech</button>
+        <button class="filter-chip" onclick="filterSector('ev', this)">EV & CleanTech</button>
+      </div>
+
+      <div class="card" id="startup-card" style="cursor: default; max-width: 600px; margin: 0 auto; width: 100%;">
+        <span class="tag" id="sector-tag" style="margin-bottom: 0.75rem; width: fit-content;">DeepTech & Native AI</span>
+        <h3 id="sector-title" style="font-size: 1.4rem;">Krutrim & Sarvam AI</h3>
+        <p id="sector-desc" style="font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">
+          Developing foundational Large Language Models natively trained across 22 official Indian languages to democratize generative AI tools for everyone.
+        </p>
+      </div>
+
+      <div style="text-align: right;">
+        <button class="btn-secondary" onclick="showPage('classrooms')">Next: Digital Classrooms →</button>
+      </div>
+    </div>
+
+    <!-- PAGE 5: CLASSROOMS & DIGITAL EDUCATION -->
+    <div id="page-classrooms" class="page">
+      <div class="hero">
+        <span class="tag">Knowledge For All</span>
+        <h2>Digital Classrooms & DIKSHA</h2>
+        <p class="desc">Unifying education infrastructure so every student has access to top learning tools.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card" style="cursor: default;">
+          <div class="card-icon">📚</div>
+          <h3>PM eVIDYA</h3>
+          <p>One Nation, One Digital Platform unifying digital learning materials for school education across all states.</p>
+        </div>
+
+        <div class="card" style="cursor: default;">
+          <div class="card-icon">🌐</div>
+          <h3>BharatNet Broadband</h3>
+          <p>Connecting over 250,000 Gram Panchayats with high-speed optical fiber networks to bridge rural digital divides.</p>
+        </div>
+
+        <div class="card" style="cursor: default;">
+          <div class="card-icon">📲</div>
+          <h3>DIKSHA Portal</h3>
+          <p>National digital infrastructure for teachers & students providing QR-coded energized textbooks and interactive learning material.</p>
+        </div>
+
+        <div class="card" style="cursor: default;">
+          <div class="card-icon">🎓</div>
+          <h3>SWAYAM Higher Ed</h3>
+          <p>Free online courses developed by top IITs and IISc faculties offering credit transfers for high school and university students.</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 1rem;">
+        <button class="btn-primary" onclick="showPage('home')">Return to Overview ↺</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Digital Bharat, Unbound Dreams • Swipe for Swaraj, Click for Progress</p>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Web Audio Sound Synthesizer
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playClickSFX(type = 'click') {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      } else if (type === 'success') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'explode') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.2);
+      }
+    }
+
+    // Ripple Effect
+    document.addEventListener('click', function(e) {
+      const target = e.target.closest('.nav-btn, .btn-primary, .btn-secondary, .amt-chip, .filter-chip, .card');
+      if (!target) return;
+
+      playClickSFX('click');
+
+      const rect = target.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      
+      const size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+
+      target.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+
+    // Page Switching
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      
+      const activePage = document.getElementById('page-' + pageId);
+      const activeBtn = document.getElementById('btn-' + pageId);
+      
+      if (activePage) activePage.classList.add('active');
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      if (pageId === 'home') animateStats();
+      if (pageId === 'space') initSpaceCanvas();
+      if (pageId === 'startups') initStartupCanvas();
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Stats Animation
+    let animatedOnce = false;
+    function animateStats() {
+      if (animatedOnce) return;
+      animatedOnce = true;
+
+      const animateVal = (id, endVal, suffix = '') => {
+        let curr = 0;
+        const step = endVal / 30;
+        const timer = setInterval(() => {
+          curr += step;
+          if (curr >= endVal) {
+            curr = endVal;
+            clearInterval(timer);
+          }
+          document.getElementById(id).innerText = Math.floor(curr) + suffix;
+        }, 30);
+      };
+
+      animateVal('stat-upi', 13, '+');
+      animateVal('stat-unicorns', 110, '+');
+      animateVal('stat-cost', 60, '%');
+    }
+
+    // UPI Selector
+    let selectedAmount = 20;
+    function setAmt(val, btn) {
+      selectedAmount = val;
+      document.querySelectorAll('.amt-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const display = document.getElementById('upi-amt');
+      display.parentElement.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        display.innerText = val;
+        display.parentElement.style.transform = 'scale(1)';
+      }, 100);
+    }
+
+    // UPI Payment Simulation
+    function pay() {
+      const btn = document.getElementById('pay-btn');
+      const status = document.getElementById('pay-status');
+      
+      btn.innerText = "Processing Transaction...";
+      btn.style.opacity = "0.7";
+      
+      setTimeout(() => {
+        btn.innerText = "Pay via UPI PIN";
+        btn.style.opacity = "1";
+        status.style.display = "block";
+        playClickSFX('success');
+        
+        setTimeout(() => { status.style.display = "none"; }, 3500);
+      }, 1000);
+    }
+
+    // Canvas 1: Space Orbit Canvas
+    let spaceAnimId;
+    let launchProgress = 0;
+
+    function initSpaceCanvas() {
+      const cvs = document.getElementById('spaceCanvas');
+      if (!cvs) return;
+      const ctx = cvs.getContext('2d');
+      cvs.width = cvs.offsetWidth;
+      cvs.height = cvs.offsetHeight;
+
+      let angle = 0;
+
+      function render() {
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        
+        const earthX = 90;
+        const earthY = cvs.height / 2;
+        const moonX = cvs.width - 90;
+        const moonY = cvs.height / 2;
+
+        ctx.fillStyle = "rgba(255,255,255,0.3)";
+        for (let i = 0; i < 20; i++) {
+          let sx = (i * 37) % cvs.width;
+          let sy = (i * 91) % cvs.height;
+          ctx.fillRect(sx, sy, 1.5, 1.5);
         }
 
-        function triggerUpiPayment() {
-            const amt = document.getElementById('upiAmount').value || '0';
-            const lang = document.getElementById('upiLang').value;
-            let msg = lang === 'Hindi' ? `Paytm par ₹${amt} praapt hue!` : `Received ₹${amt} on Soundbox!`;
-            document.getElementById('soundboxResult').innerHTML = `✅ PAYMENT SUCCESSFUL<br><br>🔊 "${msg}"`;
+        ctx.beginPath();
+        ctx.arc(earthX, earthY, 30, 0, Math.PI * 2);
+        ctx.fillStyle = '#3b82f6';
+        ctx.shadowColor = '#3b82f6';
+        ctx.shadowBlur = 15;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, 18, 0, Math.PI * 2);
+        ctx.fillStyle = '#9ca3af';
+        ctx.shadowColor = '#9ca3af';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.beginPath();
+        ctx.arc(earthX, earthY, 50, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.setLineDash([4, 4]);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(moonX, moonY, 32, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.beginPath();
+        ctx.moveTo(earthX + 50, earthY);
+        ctx.quadraticCurveTo(cvs.width / 2, cvs.height / 2 - 60, moonX - 32, moonY);
+        ctx.strokeStyle = (launchProgress > 0 && launchProgress < 1) ? 'rgba(59, 130, 246, 0.6)' : 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        let rx, ry;
+        angle += 0.04;
+
+        if (launchProgress === 0) {
+          rx = earthX + Math.cos(angle) * 50;
+          ry = earthY + Math.sin(angle) * 50;
+        } else if (launchProgress < 1) {
+          launchProgress += 0.008;
+          let t = launchProgress;
+          let p0 = { x: earthX + 50, y: earthY };
+          let p1 = { x: cvs.width / 2, y: cvs.height / 2 - 60 };
+          let p2 = { x: moonX - 32, y: moonY };
+
+          rx = (1 - t) * (1 - t) * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x;
+          ry = (1 - t) * (1 - t) * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y;
+
+          if (launchProgress >= 1) {
+            launchProgress = 1;
+            document.getElementById('space-status-txt').innerText = '🎉 Touchdown! Chandrayaan-3 successfully entered Lunar Orbit!';
+            playClickSFX('success');
+          }
+        } else {
+          rx = moonX + Math.cos(angle) * 32;
+          ry = moonY + Math.sin(angle) * 32;
         }
 
-        function calculateStartupImpact() {
-            const cap = parseFloat(document.getElementById('capitalInput').value) || 0;
-            document.getElementById('startupResult').innerHTML = `💼 Jobs Created: ~${Math.round(cap * 140)}<br>📈 Projected GDP Impact: $${(cap * 3.8).toFixed(1)}M`;
+        ctx.beginPath();
+        ctx.arc(rx, ry, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#3b82f6';
+        ctx.shadowColor = '#3b82f6';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        spaceAnimId = requestAnimationFrame(render);
+      }
+      cancelAnimationFrame(spaceAnimId);
+      render();
+    }
+
+    function launchToMoon() {
+      launchProgress = 0.01;
+      document.getElementById('space-status-txt').innerText = '🚀 Trans-Lunar Injection Fired! En route to the Moon...';
+    }
+
+    // CHANDRAYAAN-3 MOON LANDER GAME LOGIC
+    let landerActive = false;
+    let landerX = 50;
+    let landerY = 20;
+    let landerVy = 0.5;
+    let padX = 50;
+    let landerLoop;
+
+    function startLanderGame() {
+      if (landerLoop) clearInterval(landerLoop);
+
+      landerActive = true;
+      landerX = 50;
+      landerY = 20;
+      landerVy = 0.6;
+
+      padX = Math.floor(25 + Math.random() * 50);
+      document.getElementById('landing-pad').style.left = padX + '%';
+      
+      const statusTxt = document.getElementById('lander-status');
+      statusTxt.innerText = 'Descending...';
+      statusTxt.style.color = 'var(--blue)';
+
+      const landerEl = document.getElementById('vikram-lander');
+      landerEl.innerText = '🚀';
+      
+      updateLanderPosition();
+
+      landerLoop = setInterval(() => {
+        if (!landerActive) return;
+
+        landerVy += 0.08; // Gravity
+        landerY += landerVy;
+
+        document.getElementById('lander-speed').innerText = Math.abs(landerVy * 10).toFixed(1);
+
+        if (landerY >= 88) { // Surface reached
+          landerActive = false;
+          clearInterval(landerLoop);
+
+          const distanceToPad = Math.abs(landerX - padX);
+          
+          if (landerVy <= 2.2 && distanceToPad <= 10) {
+            statusTxt.innerText = 'SUCCESS! Soft Landed 🎉';
+            statusTxt.style.color = 'var(--green)';
+            playClickSFX('success');
+          } else {
+            statusTxt.innerText = 'CRASHED! Hard Impact 💥';
+            statusTxt.style.color = '#ef4444';
+            landerEl.innerText = '💥';
+            playClickSFX('explode');
+          }
+        }
+        updateLanderPosition();
+      }, 50);
+    }
+
+    function thrustLander() {
+      if (!landerActive) return;
+      landerVy -= 1.8;
+      if (landerVy < -2) landerVy = -2;
+      playClickSFX('click');
+    }
+
+    function steerLander(dir) {
+      if (!landerActive) return;
+      landerX += dir;
+      if (landerX < 10) landerX = 10;
+      if (landerX > 90) landerX = 90;
+      updateLanderPosition();
+    }
+
+    function updateLanderPosition() {
+      const landerEl = document.getElementById('vikram-lander');
+      landerEl.style.left = landerX + '%';
+      landerEl.style.top = landerY + '%';
+    }
+
+    // Canvas 2: Startup Graph Canvas
+    let startupAnimId;
+    function initStartupCanvas() {
+      const cvs = document.getElementById('startupCanvas');
+      if (!cvs) return;
+      const ctx = cvs.getContext('2d');
+      cvs.width = cvs.offsetWidth;
+      cvs.height = cvs.offsetHeight;
+
+      let points = [15, 22, 35, 45, 68, 90, 110];
+      let offset = 0;
+
+      function render() {
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        
+        const padding = 40;
+        const w = cvs.width - padding * 2;
+        const h = cvs.height - padding * 2;
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 4; i++) {
+          let y = padding + (h / 4) * i;
+          ctx.beginPath();
+          ctx.moveTo(padding, y);
+          ctx.lineTo(cvs.width - padding, y);
+          ctx.stroke();
         }
 
-        function updateSmartboard(type) {
-            const sb = document.getElementById('smartboardDisplay');
-            sb.innerHTML = type === 'math' ? '> Escape Velocity = √(2gR) = 11.2 km/s' : '> import pandas as pd\n> print("Hello Digital Bharat")';
-        }
-    </script>
+        ctx.beginPath();
+        const step = w / (points.length - 1);
+        
+        points.forEach((val, idx) => {
+          let x = padding + idx * step;
+          let wave = Math.sin(offset + idx) * 3;
+          let y = cvs.height - padding - (val / 120) * h + wave;
+
+          if (idx === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#3b82f6';
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        offset += 0.05;
+        startupAnimId = requestAnimationFrame(render);
+      }
+      cancelAnimationFrame(startupAnimId);
+      render();
+    }
+
+    // Sector Filter Strategy
+    const sectorData = {
+      ai: {
+        tag: "DeepTech & Native AI",
+        title: "Krutrim & Sarvam AI",
+        desc: "Developing foundational Large Language Models natively trained across 22 official Indian languages to democratize generative AI tools for everyone."
+      },
+      agri: {
+        tag: "Agritech Revolution",
+        title: "DeHaat & Ninjacart",
+        desc: "Empowering 5M+ farmers using AI satellite mapping, predictive weather analytics, and direct-to-retail supply chains to eliminate middlemen."
+      },
+      ev: {
+        tag: "EV & Clean Energy",
+        title: "Ola Electric & Ather",
+        desc: "Scaling indigenous Battery Energy Storage Systems (BESS) and ultra-fast charging grids to transition two-wheelers and public transit to 100% electric."
+      }
+    };
+
+    function filterSector(key, btn) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+
+      const data = sectorData[key];
+      const card = document.getElementById('startup-card');
+
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(10px)';
+
+      setTimeout(() => {
+        document.getElementById('sector-tag').innerText = data.tag;
+        document.getElementById('sector-title').innerText = data.title;
+        document.getElementById('sector-desc').innerText = data.desc;
+
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 200);
+    }
+
+    // Initial Trigger
+    window.addEventListener('DOMContentLoaded', () => {
+      animateStats();
+    });
+  </script>
 </body>
-  </html>
-  
+</html>
